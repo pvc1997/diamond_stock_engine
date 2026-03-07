@@ -1,6 +1,6 @@
 # Diamond Stock Engine
 
-[![CI](https://github.com/YOUR_USERNAME/diamond-stock-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/diamond-stock-engine/actions/workflows/ci.yml)
+[![CI](https://github.com/pvc1997/diamond_stock_engine/actions/workflows/ci.yml/badge.svg)](https://github.com/pvc1997/diamond_stock_engine/actions/workflows/ci.yml)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://docs.astral.sh/ruff/)
@@ -17,28 +17,58 @@ Systematic Indian equity portfolio management engine with walk-forward backteste
 - **Accumulate mode** — buy-only long-term portfolio with quality scoring
 - **850+ tests** — all mocked, no network calls
 
+## Prerequisites
+
+- **Python 3.9+** — [python.org](https://www.python.org/downloads/) or via your system package manager
+- **uv** — fast Python package manager ([install guide](https://docs.astral.sh/uv/getting-started/installation/))
+- **Gemini API key** *(optional)* — for AI-powered sentiment analysis. Get one at [Google AI Studio](https://aistudio.google.com/apikey)
+- **Zerodha Kite Connect** *(optional)* — for live trading. Requires a [Kite Connect](https://kite.trade/) subscription
+
 ## Quick Start
 
 ```bash
-# Install uv (Python package manager)
+# Install uv if you don't have it
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone and install
-git clone https://github.com/YOUR_USERNAME/diamond-stock-engine.git
-cd diamond-stock-engine
+git clone https://github.com/pvc1997/diamond_stock_engine.git
+cd diamond_stock_engine
 uv sync
 
 # Configure
 cp .env.example .env
-# Edit .env with your Gemini API key (optional — for AI sentiment)
+# Edit .env with your settings (see Configuration section below)
 
-# Run a strategy
-diamond run baseline --capital 500000
-diamond run gods_plan --capital 500000
+# Verify installation
+uv run pytest tests/ -x --tb=short
 
-# Paper trade first (recommended)
+# Run a strategy (paper trade first — recommended)
 diamond paper gods_plan --capital 500000
 diamond paper gods_plan --status
+
+# Or run directly (offline mode, local ledger only)
+diamond run baseline --capital 500000
+diamond run gods_plan --capital 500000
+```
+
+### Zerodha Kite Setup (for live trading)
+
+```bash
+# Install with Kite Connect support
+uv tool install -e . --with kiteconnect
+
+# Authenticate (opens browser for Zerodha login)
+diamond kite --auth
+
+# Authorize CDSL for selling (required daily)
+diamond kite --authorize-sells
+
+# Import existing holdings into a strategy
+diamond kite --import gods_plan -c 500000
+
+# Go live (always does dry-run first)
+diamond run gods_plan --live --dry-run
+diamond run gods_plan --live
 ```
 
 ## Strategies
