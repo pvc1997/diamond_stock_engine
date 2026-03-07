@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+*.egg
+
+# Environment
+.env
+
+# Runtime data — contains personal portfolio, credentials, and cached market data
+data/cache/
+data/ledgers/
+data/logs/
+data/orders/
+data/streak.db
+data/kite_session.json
+data/goals.json
+data/journal.json
+data/achievements.json
+data/rules.json
+data/snapshots.json
+data/memory/
+data/universe_cache.csv
+data/*.pdf
+
+# Reports (generated)
+reports/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# Claude Code (user-specific)
+.claude/projects/
+.claude/settings.local.json
+
+# MCP config (contains absolute paths — user-specific)
+.mcp.json
+
+# MCP server venv
+mcp_server/.venv/

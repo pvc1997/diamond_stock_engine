@@ -1,0 +1,85 @@
+[project]
+name = "diamond-stock-engine"
+version = "0.1.0"
+description = "Systematic Indian equity portfolio management engine"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+    "yfinance>=0.2.66",
+    "numpy>=1.21",
+    "pandas>=1.5",
+    "matplotlib>=3.5",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "python-dotenv>=1.0",
+    "typer[all]>=0.9",
+    "google-generativeai>=0.8",
+    "simple-term-menu>=1.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "pytest-cov>=6.0",
+    "ruff>=0.5",
+    "pyright>=1.1",
+]
+
+[project.scripts]
+diamond = "diamond.cli:app"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["SIM108"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/diamond/cli.py" = ["E501"]
+"src/diamond/dashboard.py" = ["E501"]
+"src/diamond/menu.py" = ["E501"]
+"src/diamond/daily/*.py" = ["E501"]
+"src/diamond/analysis/deep.py" = ["E501"]
+"src/diamond/analysis/sentiment.py" = ["E501"]
+
+[tool.pyright]
+pythonVersion = "3.9"
+typeCheckingMode = "standard"
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--cov=diamond --cov-report=term-missing:skip-covered --cov-fail-under=60"
+
+[tool.coverage.run]
+source = ["src/diamond"]
+omit = [
+    "src/diamond/cli.py",
+    "src/diamond/menu.py",
+    "src/diamond/dashboard.py",
+    "src/diamond/strategies/active.py",
+    "src/diamond/strategies/balanced.py",
+    "src/diamond/strategies/passive.py",
+    "src/diamond/strategies/ultimate.py",
+    "src/diamond/strategies/base.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__",
+    "if TYPE_CHECKING",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/diamond"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

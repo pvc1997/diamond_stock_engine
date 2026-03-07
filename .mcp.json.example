@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "diamond": {
+      "command": "mcp_server/.venv/bin/python",
+      "args": ["mcp_server/server.py"],
+      "env": {
+        "PYTHONPATH": "src"
+      }
+    },
+    "kite": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.kite.trade/mcp"]
+    }
+  }
+}
