@@ -25,6 +25,7 @@ data/snapshots.json
 data/memory/
 data/universe_cache.csv
 data/*.pdf
+data/.session_marker
 
 # Reports (generated)
 reports/
