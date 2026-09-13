@@ -2,7 +2,7 @@
 # Weekly digest: runs on first message on Monday
 # Suggests a weekly review if not already done
 
-PROJECT="/Users/fi-fundsindia/Desktop/FundsIndia/Projects/diamond_stock_engine"
+PROJECT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 MARKER="$PROJECT/data/.weekly_digest_marker"
 
 cd "$PROJECT" || exit 0

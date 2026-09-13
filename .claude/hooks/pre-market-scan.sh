@@ -3,7 +3,7 @@
 # Fetches overnight global cues and market prep data
 # Silent if already ran today or outside market prep window
 
-PROJECT="/Users/fi-fundsindia/Desktop/FundsIndia/Projects/diamond_stock_engine"
+PROJECT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 MARKER="$PROJECT/data/.premarket_marker"
 
 cd "$PROJECT" || exit 0
@@ -45,7 +45,7 @@ fi
 
 # Check for any critical alerts before market opens
 ALERTS=$(uv run diamond alerts gods_plan 2>/dev/null || echo "")
-CRIT_COUNT=$(echo "$ALERTS" | grep -c "\[CRITICAL\]" || echo "0")
+CRIT_COUNT=$(echo "$ALERTS" | grep -c "\[CRITICAL\]")
 if [ "$CRIT_COUNT" -gt 0 ]; then
     OUTPUT="${OUTPUT}MORNING_ALERTS: $CRIT_COUNT critical alert(s) need attention before market opens.\n"
 fi

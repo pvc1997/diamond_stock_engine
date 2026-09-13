@@ -3,7 +3,7 @@
 # Checks if any portfolio stock has breached stop-loss levels
 # Only runs once per hour to avoid spam
 
-PROJECT="/Users/fi-fundsindia/Desktop/FundsIndia/Projects/diamond_stock_engine"
+PROJECT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 MARKER="$PROJECT/data/.stoploss_check_marker"
 
 cd "$PROJECT" || exit 0
@@ -36,7 +36,7 @@ echo "$CURRENT_HOUR" > "$MARKER"
 
 # Check for stop-loss alerts
 ALERTS=$(uv run diamond alerts gods_plan 2>/dev/null || echo "")
-STOPLOSS_COUNT=$(echo "$ALERTS" | grep -ci "stop.loss\|drawdown.*CRITICAL" || echo "0")
+STOPLOSS_COUNT=$(echo "$ALERTS" | grep -ci "stop.loss\|drawdown.*CRITICAL")
 
 if [ "$STOPLOSS_COUNT" -gt 0 ]; then
     OUTPUT="STOP_LOSS_ALERT: $STOPLOSS_COUNT stop-loss or critical drawdown alert(s) detected during market hours. Surface these immediately to the user with recommended actions.\n"

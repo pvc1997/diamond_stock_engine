@@ -3,14 +3,14 @@
 # Detects absence, overdue rebalance, and critical alerts
 # Outputs hints for Claude to act on. Silent if nothing to report.
 
-PROJECT="/Users/fi-fundsindia/Desktop/FundsIndia/Projects/diamond_stock_engine"
+PROJECT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 MARKER="$PROJECT/data/.session_marker"
 
 cd "$PROJECT" || exit 0
 
 # Only run once per session (marker less than 2 hours old = skip)
 if [ -f "$MARKER" ]; then
-    MARKER_AGE=$(( $(date +%s) - $(stat -f %m "$MARKER" 2>/dev/null || echo 0) ))
+    MARKER_AGE=$(( $(date +%s) - $(stat -c %Y "$MARKER" 2>/dev/null || stat -f %m "$MARKER" 2>/dev/null || echo 0) ))
     if [ "$MARKER_AGE" -lt 7200 ]; then
         exit 0
     fi
@@ -30,7 +30,7 @@ fi
 
 # Check 2: Critical alerts
 ALERTS=$(uv run diamond alerts gods_plan 2>/dev/null || echo "")
-CRIT_COUNT=$(echo "$ALERTS" | grep -c "\[CRITICAL\]" || echo "0")
+CRIT_COUNT=$(echo "$ALERTS" | grep -c "\[CRITICAL\]")
 if [ "$CRIT_COUNT" -gt 0 ]; then
     OUTPUT="${OUTPUT}CRITICAL_ALERTS: $CRIT_COUNT critical alert(s) found. Surface these to the user.\n"
 fi

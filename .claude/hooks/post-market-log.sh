@@ -3,7 +3,7 @@
 # Suggests logging the day's P&L and reviewing movers
 # Silent unless it's the first message after market close
 
-PROJECT="/Users/fi-fundsindia/Desktop/FundsIndia/Projects/diamond_stock_engine"
+PROJECT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 MARKER="$PROJECT/data/.postmarket_marker"
 
 cd "$PROJECT" || exit 0

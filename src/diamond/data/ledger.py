@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import fcntl
 import logging
-import shutil
 import sqlite3
 import time
 from contextlib import contextmanager
@@ -282,7 +281,18 @@ class Ledger:
         backup_path = backup_dir / f"{self.db_path.stem}_{timestamp}.db"
 
         try:
-            shutil.copy2(self.db_path, backup_path)
+            # Use SQLite's online backup API rather than copying the file.
+            # The ledger runs in WAL mode, so a plain file copy misses every
+            # write still sitting in the -wal sidecar and yields an empty DB.
+            src = sqlite3.connect(self.db_path)
+            try:
+                dst = sqlite3.connect(backup_path)
+                try:
+                    src.backup(dst)
+                finally:
+                    dst.close()
+            finally:
+                src.close()
             logger.info(f"Ledger backed up to {backup_path}")
 
             # Prune old backups
