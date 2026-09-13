@@ -3,7 +3,7 @@
 # Runs once per day (after 6 PM on weekdays)
 # Warns user to avoid trading stocks with imminent earnings
 
-PROJECT="/Users/fi-fundsindia/Desktop/FundsIndia/Projects/diamond_stock_engine"
+PROJECT="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 MARKER="$PROJECT/data/.earnings_alert_marker"
 
 cd "$PROJECT" || exit 0
